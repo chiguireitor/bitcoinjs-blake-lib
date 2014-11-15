@@ -1,5 +1,5 @@
 var assert = require('assert')
-var base58check = require('bs58check')
+var base58check = require('./bs58check')
 var enforceType = require('./types')
 var networks = require('./networks')
 var scripts = require('./scripts')

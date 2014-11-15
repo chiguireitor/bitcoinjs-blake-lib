@@ -1,5 +1,5 @@
 var assert = require('assert')
-var base58check = require('bs58check')
+var base58check = require('./bs58check')
 var crypto = require('crypto')
 var ecdsa = require('./ecdsa')
 var enforceType = require('./types')

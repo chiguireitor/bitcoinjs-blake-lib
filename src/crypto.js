@@ -1,7 +1,8 @@
 var crypto = require('crypto')
 
-function hash160(buffer) {
-  return ripemd160(sha256(buffer))
+function hash160(buffer, innerHash) {
+  var hsh = innerHash || sha256
+  return ripemd160(hsh(buffer))
 }
 
 function hash256(buffer) {

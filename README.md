@@ -1,14 +1,6 @@
-# BitcoinJS (bitcoinjs-lib)
+# BitcoinJS Blake (bitcoinjs-blake-lib)
 
-[![Build Status](https://travis-ci.org/bitcoinjs/bitcoinjs-lib.png?branch=master)](https://travis-ci.org/bitcoinjs/bitcoinjs-lib)
-[![Coverage Status](https://coveralls.io/repos/bitcoinjs/bitcoinjs-lib/badge.png)](https://coveralls.io/r/bitcoinjs/bitcoinjs-lib)
-[![tip for next commit](http://tip4commit.com/projects/735.svg)](http://tip4commit.com/projects/735)
-
-[![NPM](https://nodei.co/npm/bitcoinjs-lib.png)](https://nodei.co/npm/bitcoinjs-lib/)
-
-[![Browser Support](https://ci.testling.com/bitcoinjs/bitcoinjs-lib.png)](https://ci.testling.com/bitcoinjs/bitcoinjs-lib)
-
-The pure JavaScript Bitcoin library for node.js and browsers.
+The pure JavaScript Bitcoin library for node.js and browsers. Modified for Blake ecosystem compatibility.
 A continued implementation of the original `0.1.3` version used by over a million wallet users; the backbone for almost all Bitcoin web wallets in production today.
 
 
@@ -36,32 +28,34 @@ If you are looking for the original, it is tagged as `0.1.3`. Unless you need it
 
 ## Installation
 
-`npm install bitcoinjs-lib`
+Not working still, but will probably will be:
+
+`npm install bitcoinjs-blake-lib`
 
 
 ## Setup
 
 ### Node.js
 
-    var bitcoin = require('bitcoinjs-lib')
+    var blakecoin = require('bitcoinjs-blake-lib')
 
 From the repo:
 
-    var bitcoin = require('./src/index.js')
+    var blakecoin = require('./src/index.js')
 
 
 ### Browser
 
-From the repository: Compile `bitcoinjs-min.js` with the following command:
+From the repository: Compile `bitcoinjs-blake-min.js` with the following command:
 
     $ npm run-script compile
 
 From NPM:
 
-    $ npm -g install bitcoinjs-lib browserify uglify-js
-    $ browserify -r bitcoinjs-lib -s bitcoin | uglifyjs > bitcoinjs.min.js
+    $ npm -g install bitcoinjs-blake-lib browserify uglify-js
+    $ browserify -r bitcoinjs-blake-lib -s blakecoin | uglifyjs > bitcoinjs-blake.min.js
 
-After loading this file in your browser, you will be able to use the global `bitcoin` object.
+After loading this file in your browser, you will be able to use the global `blakecoin` object.
 
 
 ## Usage
