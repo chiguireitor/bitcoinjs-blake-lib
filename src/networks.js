@@ -123,7 +123,7 @@ var networks = {
     dustThreshold: 546, // https://github.com/zetacoin/zetacoin/blob/master/src/core.h#L159
     feePerKb: 10000, // https://github.com/zetacoin/zetacoin/blob/master/src/main.cpp#L54
     estimateFee: estimateFee('blakecoin'),
-    alternateChecksumHash: function(payload) { var b8 = require('./blake8.js'); console.log('Using blake8'); return b8(payload) }
+    alternateChecksumHash: function(payload) { var b8 = require('./blake8.js').blake8; console.log('Using blake8'); return b8(payload) }
   }
 }
 

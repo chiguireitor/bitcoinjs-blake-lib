@@ -1,7 +1,9 @@
 var crypto = require('crypto')
+var blake8 = require('./blake8.js')
 
 function hash160(buffer, innerHash) {
   var hsh = innerHash || sha256
+  
   return ripemd160(hsh(buffer))
 }
 
@@ -37,5 +39,6 @@ module.exports = {
   hash160: hash160,
   hash256: hash256,
   HmacSHA256: HmacSHA256,
-  HmacSHA512: HmacSHA512
+  HmacSHA512: HmacSHA512,
+  hmacBlake8: blake8.hmacBlake8
 }

@@ -4,11 +4,15 @@ var assert = require('assert')
 var base58 = require('bs58')
 var crypto = require('crypto')
 
-var blake8 = require('./blake8.js')
+var blake8 = require('./blake8.js').blake8
 
 // SHA256(SHA256(buffer))
 function sha256x2(buffer) {
   buffer = crypto.createHash('sha256').update(buffer).digest()
+  return crypto.createHash('sha256').update(buffer).digest()
+}
+
+function sha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest()
 }
 

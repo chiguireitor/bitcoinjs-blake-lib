@@ -5,6 +5,8 @@ var enforceType = require('./types')
 var BigInteger = require('bigi')
 var ECSignature = require('./ecsignature')
 
+var hmacBlake8 = require('./blake8.js').hmacBlake8
+
 // https://tools.ietf.org/html/rfc6979#section-3.2
 function deterministicGenerateK(curve, hash, d) {
   enforceType('Buffer', hash)
@@ -24,27 +26,27 @@ function deterministicGenerateK(curve, hash, d) {
   k.fill(0)
 
   // Step D
-  k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([0]), x, hash]), k)
+  k = crypto.hmacBlake8(Buffer.concat([v, new Buffer([0]), x, hash]), k)
 
   // Step E
-  v = crypto.HmacSHA256(v, k)
+  v = crypto.hmacBlake8(v, k)
 
   // Step F
-  k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([1]), x, hash]), k)
+  k = crypto.hmacBlake8(Buffer.concat([v, new Buffer([1]), x, hash]), k)
 
   // Step G
-  v = crypto.HmacSHA256(v, k)
+  v = crypto.hmacBlake8(v, k)
 
   // Step H1/H2a, ignored as tlen === qlen (256 bit)
   // Step H2b
-  v = crypto.HmacSHA256(v, k)
+  v = crypto.hmacBlake8(v, k)
 
   var T = BigInteger.fromBuffer(v)
 
   // Step H3, repeat until T is within the interval [1, n - 1]
   while ((T.signum() <= 0) || (T.compareTo(curve.n) >= 0)) {
-    k = crypto.HmacSHA256(Buffer.concat([v, new Buffer([0])]), k)
-    v = crypto.HmacSHA256(v, k)
+    k = crypto.hmacBlake8(Buffer.concat([v, new Buffer([0])]), k)
+    v = crypto.hmacBlake8(v, k)
 
     T = BigInteger.fromBuffer(v)
   }

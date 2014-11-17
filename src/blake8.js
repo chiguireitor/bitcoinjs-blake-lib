@@ -1,53 +1,67 @@
 var Module = require('./blake.js')
 
 function blake8_string(data) {
-    var src = Module.allocate(Module.intArrayFromString(data), 'i8', Module.ALLOC_STACK)
+    //var src = Module.allocate(Module.intArrayFromString(data), 'i8', Module.ALLOC_STACK)
+    
+    var src = Module._malloc(data.length)
+    
+    for (var i=0; i < data.length; i++) {
+        Module.setValue(src + i, data[i])
+    }
+    
     var dst = Module.allocate(32, 0, Module.ALLOC_STACK)
     
     Module._blake8(src, data.length, dst)
     
-    var ret = Module.Pointer_stringify(dst)
+    var ret = []
     
-    /*Module._free(src)
-    Module._free(dst)*/
+    for (var i=0; i < 32; i++) {
+        ret.push(Module.getValue(dst + i, 'i8'))
+    }
+    
+    Module._free(src)
     
     return new Buffer(ret)
 }
 
-/*function blake8_intarr(data) {
-    var src = allocate(intArrayFromString(data), 'i8', ALLOC_STACK)
-    var dst = allocate(32, 0, ALLOC_STACK)
+function HmacBlake8(buffer, secret) {
+    var src = Module.allocate(Module.intArrayFromString(buffer), 'i8', Module.ALLOC_STACK)
+    var key = Module.allocate(Module.intArrayFromString(secret), 'i8', Module.ALLOC_STACK)
+    var dst = Module.allocate(32, 0, Module.ALLOC_STACK)
     
-    _blake8(src, data.length, dst)
+    Module._hmac_blake8(src, buffer.length, key, secret.length, dst)
     
-    var n = []
-    for (var x=0; x < 32; x++) {
-        n.push(getValue(dst+x, "i8") & 0xFF)
+    var ret = []
+    
+    for (var i=0; i < 32; i++) {
+        ret.push(Module.getValue(dst + i, 'i8'))
     }
     
-    return n
+    return new Buffer(ret)
 }
 
-function bintohex(data) {
-    return data.map(function (x) {
-        x = x + 0xFFFFFFFF + 1;  // twos complement
-        x = x.toString(16); // to hex
-        x = ("00"+x).substr(-2); // zero-pad to 2-digits
-        return x
-    }).join('')
-}
-
-function blake8_hexstr(data) {
-    return bintohex(blake8_intarr(data))
-}
-
-function bintoarr(data) {
-    var arr = []
-    for (var i=0; i < data.length; i++) {
-        arr.push(data.charCodeAt(i))
+function HmacBlake8_old(buffer, secret) {
+    var ipad = new Buffer(Array.apply(null, new Array(64)).map(function(){ return 0x36 }))
+    var opad = new Buffer(Array.apply(null, new Array(64)).map(function(){ return 0x5c }))
+    
+    if (secret.length > 64) {
+        secret = blake8_string(secret)
     }
     
-    return arr
-}*/
+    for (var i=0; i < secret.length; i++) {
+        ipad[i] ^= secret[i]
+        opad[i] ^= secret[i]
+    }
+    
+    var tbuf = Buffer.concat([opad, blake8_string(Buffer.concat([ipad, buffer]))])
+    
+    console.log(tbuf)
+    
+    return blake8_string(tbuf)
+}
 
-module.exports = blake8_string
+module.exports = {
+    blake8: blake8_string,
+    hmacBlake8: HmacBlake8_old,
+    hmacBlake8_old: HmacBlake8_old
+}

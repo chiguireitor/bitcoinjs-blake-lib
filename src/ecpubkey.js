@@ -35,7 +35,7 @@ ECPubKey.fromHex = function(hex) {
 ECPubKey.prototype.getAddress = function(network) {
   network = network || networks.bitcoin
 
-  var innerHash = network.alternateChecksumHash || crypto.sha256
+  var innerHash = crypto.sha256 //network.alternateChecksumHash || crypto.sha256 // crypto.sha256
   
   return new Address(crypto.hash160(this.toBuffer(), innerHash), network.pubKeyHash)
 }
