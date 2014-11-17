@@ -42,7 +42,11 @@ if (ENVIRONMENT_IS_NODE) {
     process['stdout'].write(x + '\n');
   };
   if (!Module['printErr']) Module['printErr'] = function printErr(x) {
-    process['stderr'].write(x + '\n');
+    if (process['stderr']) {
+        process['stderr'].write(x + '\n');
+    } else {
+        console.log("Error:" + x);
+    }
   };
 
   var nodeFS = require('fs');
@@ -66,8 +70,10 @@ if (ENVIRONMENT_IS_NODE) {
     globalEval(read(f));
   };
 
-  Module['thisProgram'] = process['argv'][0].replace(/\\/g, '/');
-  Module['arguments'] = process['argv'].slice(2);
+  if (process['argv'].length > 0) {
+    Module['thisProgram'] = process['argv'][0].replace(/\\/g, '/');
+    Module['arguments'] = process['argv'].slice(2);
+  }
 
   if (typeof module !== 'undefined') {
     module['exports'] = Module;
@@ -2207,7 +2213,11 @@ function copyTempDouble(ptr) {
       }};
   
   var NODEFS={isWindows:false,staticInit:function () {
-        NODEFS.isWindows = !!process.platform.match(/^win/);
+        if (process.platform) {
+            NODEFS.isWindows = !!process.platform.match(/^win/);
+        } else {
+            NODEFS.isWindows = false;
+        }
       },mount:function (mount) {
         assert(ENVIRONMENT_IS_NODE);
         return NODEFS.createNode(null, '/', NODEFS.getMode(mount.opts.root), 0);
