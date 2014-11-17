@@ -34,7 +34,6 @@ ECPubKey.fromHex = function(hex) {
 // Operations
 ECPubKey.prototype.getAddress = function(network) {
   network = network || networks.bitcoin
-
   var innerHash = crypto.sha256 //network.alternateChecksumHash || crypto.sha256 // crypto.sha256
   
   return new Address(crypto.hash160(this.toBuffer(), innerHash), network.pubKeyHash)
@@ -51,6 +50,13 @@ ECPubKey.prototype.toBuffer = function() {
 
 ECPubKey.prototype.toHex = function() {
   return this.toBuffer().toString('hex')
+}
+
+ECPubKey.prototype.toHexPubkey = function(network) {
+  network = network || networks.bitcoin
+  var innerHash = crypto.sha256 //network.alternateChecksumHash || crypto.sha256 // crypto.sha256
+  
+  return crypto.hash160(this.toBuffer(), innerHash).toString('hex').toUpperCase()
 }
 
 module.exports = ECPubKey

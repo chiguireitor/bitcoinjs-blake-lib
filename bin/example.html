@@ -2,17 +2,20 @@
 <body>
 <button onclick="generar()">Generate!</button><br>
 WIF: <span id="wif"></span><br>
+Pubkey: <span id="pub"></span><br>
 Blake Addr: <span id="addr"></span>
 <script src="./bitcoinjs-blake.min.js"></script>
 <script>
 function generar() {
     var addr = document.getElementById("addr")
     var wif = document.getElementById("wif")
+    var pub = document.getElementById("pub")
     
     var key = Blakecoin.ECKey.makeRandom()
     
     addr.innerText = key.pub.getAddress(Blakecoin.networks.blakecoin).toString()
     wif.innerText = key.toWIF(Blakecoin.networks.blakecoin).toString()
+    pub.innerText = key.pub.toHexPubkey()
 }
 </script>
 </body>
